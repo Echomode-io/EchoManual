@@ -13,7 +13,7 @@ export default defineConfig({
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:title", content: "EchoMode Documentation" }],
     ["meta", { property: "og:description", content: "Product guides and API reference for alignment-aware conversational AI." }],
-    ["meta", { property: "og:url", content: "https://developer.echomode.io" }],
+    ["meta", { property: "og:url", content: "https://developers.echomode.io" }],
   ],
 
   // Serve the repo-root `public/` (CNAME + User Manual screenshots) as static
