@@ -9,7 +9,7 @@ export default defineConfig({
   cleanUrls: true,
 
   head: [
-    ["link", { rel: "icon", type: "image/svg+xml", href: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔊</text></svg>" }],
+    ["link", { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:title", content: "EchoMode Documentation" }],
     ["meta", { property: "og:description", content: "Product guides and API reference for alignment-aware conversational AI." }],
