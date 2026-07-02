@@ -1,4 +1,4 @@
-import { cpSync, mkdirSync, readdirSync, watch } from "node:fs";
+import { cpSync, mkdirSync, readdirSync, rmSync, watch } from "node:fs";
 import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,16 +22,43 @@ function copyMarkdownTree(src, dest) {
 }
 
 function syncDocs() {
+  rmSync(contentDir, { recursive: true, force: true });
   copyMarkdownTree(docsDir, contentDir);
 }
 
 syncDocs();
 
 if (process.argv.includes("--watch")) {
-  watch(docsDir, { recursive: true }, () => syncDocs());
-  spawn("npx", ["vitepress", "dev"], {
+  const watcher = watch(docsDir, { recursive: true }, () => {
+    try {
+      syncDocs();
+    } catch (err) {
+      console.error("sync-docs: copy failed, will retry on next change", err);
+    }
+  });
+
+  const child = spawn("npx", ["vitepress", "dev"], {
     cwd: root,
     stdio: "inherit",
     shell: true,
   });
+
+  function cleanup(code) {
+    watcher.close();
+    child.kill();
+    process.exit(code ?? 0);
+  }
+
+  child.on("exit", (code) => {
+    watcher.close();
+    process.exit(code ?? 0);
+  });
+
+  child.on("error", (err) => {
+    watcher.close();
+    throw err;
+  });
+
+  process.on("SIGINT", () => cleanup());
+  process.on("SIGTERM", () => cleanup());
 }
