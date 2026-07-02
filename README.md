@@ -7,7 +7,7 @@ Source for [developers.echomode.io](https://developers.echomode.io).
 | Path | Purpose |
 |------|---------|
 | `docs/index.md` | Landing page |
-| `docs/guide/*.md` | Product guide (frontend manual) |
+| `docs/manual/*.md` | Product guide (user manual) |
 | `docs/api/*.md` | API reference |
 | `.vitepress/config.ts` | Site config (nav, sidebar) |
 | `.vitepress/theme/` | Custom theme (EchoMode branding) |

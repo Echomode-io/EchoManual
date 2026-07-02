@@ -4,12 +4,16 @@ layout: page
 
 <script setup>
 import { onMounted } from 'vue'
-import { useRouter } from 'vitepress'
+import { useRouter, useData } from 'vitepress'
 
 onMounted(() => {
+  const { site } = useData()
+  const base = site.value.base || '/'
   const router = useRouter()
-  router.go('/manual/')
+  router.go(`${base}manual/`)
 })
 </script>
 
-<meta http-equiv="refresh" content="0;url=/manual/">
+<noscript>
+  <meta http-equiv="refresh" content="0;url=/manual/">
+</noscript>
