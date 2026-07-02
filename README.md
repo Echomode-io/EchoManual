@@ -1,6 +1,6 @@
 # EchoMode Docs
 
-Source for [developer.echomode.io](https://developer.echomode.io).
+Source for [developers.echomode.io](https://developers.echomode.io).
 
 ## Structure
 
