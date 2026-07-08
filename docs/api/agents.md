@@ -22,6 +22,7 @@ List agent summaries visible to the current user.
       "temperature": 0.7,
       "max_tokens": 4096,
       "user_off_topic_streak_threshold": 3,
+      "enabled_tools": ["google_calendar", "brave_search"],
       "user_on_topic_streak_threshold": 3,
       "visibility": "org_level",
       "team_ids": [],
@@ -59,7 +60,7 @@ Get full agent details.
 
 ### PATCH /agents/{agent_id}
 
-Update an agent's metadata and scope. Inference fields (prompt, model, temperature, max_tokens) are immutable after publish. All fields are optional.
+Update an agent's metadata. Inference fields (prompt, model, temperature, max_tokens, anchor words) and scope (visibility, teams) are immutable after publish — change them by creating a draft and re-publishing. All fields are optional.
 
 **Request body**
 
@@ -69,8 +70,7 @@ Update an agent's metadata and scope. Inference fields (prompt, model, temperatu
 | tags | string[] | Categorization tags |
 | color | string | Hex color for UI |
 | icon_name | string | Icon identifier |
-| visibility | string | `personal`, `team_level`, or `org_level` (`universal` is not accepted) |
-| team_ids | uuid[] | Required when visibility is `team_level` |
+| enabled_tools | string[] | Tool definition IDs to enable (validated against tool registry) |
 
 **Response** `200` — updated agent object.
 
@@ -87,6 +87,103 @@ Hide an agent from the current user's library view.
 ### DELETE /agents/{agent_id}/hide
 
 Unhide a previously hidden agent.
+
+**Response** `204` No content.
+
+---
+
+### GET /agents/tools
+
+List the full tool catalog. Each entry includes connection status and per-action grants for the caller's org.
+
+**Response** `200`
+
+```json
+{
+  "items": [
+    {
+      "id": "google_calendar",
+      "name": "Google Calendar",
+      "group": "Google",
+      "description": "...",
+      "requires_credentials": false,
+      "credential_fields": [],
+      "available": true,
+      "auth_kind": "oauth",
+      "connected": true,
+      "actions": [
+        {
+          "id": "google_calendar_create_event",
+          "label": "Create Event",
+          "description": "...",
+          "crudl": "create",
+          "granted": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+### GET /agents/tools/connections
+
+List org-level tool provider connections for the Connections page.
+
+**Response** `200`
+
+```json
+{
+  "items": [
+    {
+      "provider": "google",
+      "name": "Google",
+      "connected": true,
+      "configured": true,
+      "auth_mode": "oauth",
+      "category": "integration",
+      "credential_fields": [],
+      "scope_options": [],
+      "tools": ["Google Calendar", "Google Docs"],
+      "auth_actions": ["google_calendar_create_event"],
+      "actions": [{ "id": "...", "label": "...", "description": "...", "crudl": "create", "granted": true }]
+    }
+  ],
+  "is_org_admin": true
+}
+```
+
+### GET /agents/tools/{provider}/authorize
+
+Start OAuth consent for a tool provider (org admins only).
+
+**Query parameters**
+
+| Param | Type | Description |
+|-------|------|-------------|
+| return_to | string | Frontend path to redirect after callback |
+| scopes | string[] | OAuth scopes to request (repeat param for multiple) |
+
+**Response** `200`
+
+```json
+{ "authorize_url": "https://accounts.google.com/..." }
+```
+
+### POST /agents/tools/{provider}/connection
+
+Connect a platform-key provider by supplying an API key (org admins only).
+
+**Request body**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| api_key | string | API key for the provider |
+
+**Response** `204` No content.
+
+### DELETE /agents/tools/{provider}/connection
+
+Disconnect a tool provider (org admins only).
 
 **Response** `204` No content.
 

@@ -67,6 +67,7 @@ Create a new draft workspace with an initial version.
 | temperature | number | `0.7` | Sampling temperature (ignored when forking) |
 | max_tokens | integer | `4096` | Max response tokens (ignored when forking) |
 | anchor_words | object | — | Anchor word map (ignored when forking) |
+| enabled_tools | string[] | `[]` | Tool definition IDs to enable (validated against tool registry; ignored when forking) |
 | golden_cases | object[] | — | Golden test cases — each object has `id` (string), `prompt` (string), and `reference_answer` (string, default `""`) (ignored when forking) |
 
 **Response** `201` — `AgentDraftDetail` (see [Get a draft](#get-agent-drafts-draft_id)).
@@ -111,6 +112,7 @@ Get a draft with its full version chain.
       "max_tokens": 4096,
       "anchor_words": { "help": 1, "issue": 1 },
       "anchor_word_count": 20,
+      "enabled_tools": ["google_calendar"],
       "eval_scores": null,
       "eval_status": null,
       "golden_cases": [],
@@ -144,6 +146,7 @@ Any version in the chain may be used as the parent. If the parent already has de
 | temperature | number | `0.7` | Sampling temperature |
 | max_tokens | integer | `4096` | Max response tokens |
 | anchor_words | object | — | Anchor word map |
+| enabled_tools | string[] | `[]` | Tool definition IDs to enable (validated against tool registry) |
 | golden_cases | object[] | — | Golden test cases — each object has `id` (string), `prompt` (string), and `reference_answer` (string, default `""`) |
 | eval_scores | object | — | Preview eval scores to persist |
 | force | boolean | `false` | Delete existing descendants before committing |

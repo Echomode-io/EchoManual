@@ -178,4 +178,16 @@ Most recently updated chats, ordered by `updated_at` descending.
 ]
 ```
 
+### GET /logs/agents
+
+List agents that have at least one logged chat visible to the caller. Used for filter dropdowns.
+
+**Response** `200`
+
+```json
+[
+  { "id": "uuid", "name": "Customer Support Bot" }
+]
+```
+
 ---
