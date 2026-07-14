@@ -24,6 +24,15 @@ export default defineConfig({
   },
 
   themeConfig: {
+    // Brand lockup (logomark + wordmark) replaces the text title in the nav.
+    // Variants bake the app's --text-primary per theme; orange accent is shared.
+    logo: {
+      light: "/echomode-lockup-light.svg",
+      dark: "/echomode-lockup-dark.svg",
+      alt: "EchoMode",
+    },
+    siteTitle: false,
+
     nav: [
       { text: "User Manual", link: "/manual/" },
       { text: "API", link: "/api/" },
